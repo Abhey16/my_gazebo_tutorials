@@ -49,7 +49,8 @@ The `MyNode` class:
    ```
 
 ## clang-tidy output
-file:///home/abhey/Pictures/Screenshots/Screenshot%20from%202024-11-07%2022-55-59.png
+![Screenshot from 2024-11-07 22-55-59](https://github.com/user-attachments/assets/939077c3-5959-4ba4-b9bb-4a448ce4bae3)
+
 
 ## clanglint output
-file:///home/abhey/Pictures/Screenshots/Screenshot%20from%202024-11-07%2023-02-07.png
+![Screenshot from 2024-11-07 23-02-07](https://github.com/user-attachments/assets/9ac670d0-c5e1-466e-8aeb-b59ce4812a83)
