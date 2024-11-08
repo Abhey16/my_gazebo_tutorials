@@ -48,3 +48,8 @@ The `MyNode` class:
    ros2 run beginner_tutorials my_node
    ```
 
+## clang-tidy output
+file:///home/abhey/Pictures/Screenshots/Screenshot%20from%202024-11-07%2022-55-59.png
+
+## clanglint output
+file:///home/abhey/Pictures/Screenshots/Screenshot%20from%202024-11-07%2023-02-07.png
