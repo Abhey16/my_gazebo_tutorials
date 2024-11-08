@@ -45,6 +45,6 @@ The `MyNode` class:
 
 ### 6. Run the Publisher Node:
    ```sh
-   ros2 run beginner_tutorials publisher_node
+   ros2 run beginner_tutorials my_node
    ```
 
