@@ -9,3 +9,5 @@ src/*
 # Exclude beginner_tutorials package from being ignored
 !src/beginner_tutorials/
 !src/beginner_tutorials/**
+
+compile_commands.json
