@@ -7,12 +7,13 @@
 #include <example_interfaces/msg/string.hpp>
 #include <rclcpp/timer.hpp>
 
+// Declaring MyNode class
 class MyNode : public rclcpp::Node
 {
 public:
     // Constructor
     MyNode();
-    
+
 private:
     // Callback function for publishing custom string
     void publishCallback();
