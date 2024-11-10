@@ -1,3 +1,7 @@
+// MIT License
+// 
+// Copyright (c) 2024 Abhey Sharma
+
 /**
  * @file my_node.cpp
  * @brief Implementation file for the MyNode class
