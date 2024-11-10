@@ -16,6 +16,11 @@ void SubscriberNode::subscriberCallback(example_interfaces::msg::String::SharedP
 {
 
     RCLCPP_INFO(this->get_logger(), "%s", msg->data.c_str());
+
+    if (msg->data == "This msg has been updated!") 
+    {
+        RCLCPP_WARN(this->get_logger(), "Updated message received.");
+    }
 }
 
 int main(int argc, char **argv)
