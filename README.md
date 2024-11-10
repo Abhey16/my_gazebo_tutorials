@@ -79,16 +79,20 @@ ros2 launch beginner_tutorials tutorial_launch.py publish_time:=2
 ```
 
 ## clang-tidy output
+![clang-tidy](https://github.com/user-attachments/assets/21864b94-3c91-45cf-bb19-c11420b19348)
 
 
 ## clanglint output
+![cpplint](https://github.com/user-attachments/assets/aa165bc3-033a-4acd-95c8-9e7eaefe9971)
 
 
 ## rqt_console
 
 ### INFO
+![info](https://github.com/user-attachments/assets/ef75042a-1403-4597-90b7-f32b070090cd)
 
 
 ### WARN
+![warning](https://github.com/user-attachments/assets/1b6e5c41-e38c-427f-9138-dcd91da45e74)
 
 
