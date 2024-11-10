@@ -41,8 +41,8 @@ void MyNode::publishCallback() {
   msg.data = base_message_;
 
   // Printing the msg that is published on "my_topic"
-  // RCLCPP_DEBUG_STREAM(this->get_logger(), "Publishing: " << msg.data);
-  RCLCPP_INFO(this->get_logger(), "%s", msg.data.c_str());
+  RCLCPP_DEBUG_STREAM(this->get_logger(), "Publishing: " << msg.data);
+  // RCLCPP_INFO(this->get_logger(), "%s", msg.data.c_str());
 
   // publish
   publisher_->publish(msg);

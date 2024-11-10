@@ -19,6 +19,9 @@ include_directories(include)
 add_executable(my_node src/my_node.cpp)
 ament_target_dependencies(my_node rclcpp example_interfaces)
 
+add_executable(my_sub src/my_sub.cpp)
+ament_target_dependencies(my_sub rclcpp example_interfaces)
+
 target_include_directories(my_node PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
@@ -26,6 +29,7 @@ target_include_directories(my_node PUBLIC
 
 install(TARGETS
   my_node
+  my_sub
   DESTINATION lib/${PROJECT_NAME}
 )
 
