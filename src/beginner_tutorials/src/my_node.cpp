@@ -36,6 +36,14 @@ MyNode::MyNode() : Node("my_node"),base_message_{"Hi, My name is Abhey"}
 }
 
 void MyNode::publishCallback() {
+
+  if (!publisher_) {
+    // Critical failure case: publisher is null
+    RCLCPP_FATAL(this->get_logger(), "Publisher not initialized! Node cannot continue.");
+    rclcpp::shutdown();  // Shutdown node on fatal error
+    return;
+  }
+
   // Creating string object
   auto msg = example_interfaces::msg::String();
   msg.data = base_message_;
@@ -73,6 +81,9 @@ int main(int argc, char** argv) {
 
   // Node created
   auto node = std::make_shared<MyNode>();
+
+
+  RCLCPP_DEBUG(node->get_logger(), "Publisher Node has started spinning");
 
   // Keeping the node alive
   rclcpp::spin(node);

@@ -24,6 +24,8 @@ int main(int argc, char **argv)
 
     auto node = std::make_shared<SubscriberNode>();
 
+    RCLCPP_DEBUG(node->get_logger(), "Subscriber Node has started spinning");
+
     rclcpp::spin(node);
 
     rclcpp::shutdown();
