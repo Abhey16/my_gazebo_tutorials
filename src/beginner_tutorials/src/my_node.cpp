@@ -1,3 +1,10 @@
+/**
+ * @file my_node.cpp
+ * @brief Implementation file for the MyNode class
+ * @details Contains the implementation of the MyNode class methods including
+ *          constructor, callbacks, and main function
+ */
+
 #include "beginner_tutorials/my_node.hpp"
 
 #include <chrono>
@@ -13,8 +20,7 @@
 using std::placeholders::_1;
 using std::placeholders::_2;
 
-// Constructor of MyNode class
-MyNode::MyNode() : Node("my_node"),base_message_{"Hi, My name is Abhey"}
+MyNode::MyNode() : Node("my_node"), base_message_{"Hi, My name is Abhey"}
 {
   // Declare a parameter for publisher time_interval in seconds
   this->declare_parameter("publish_time", 1);
@@ -22,9 +28,9 @@ MyNode::MyNode() : Node("my_node"),base_message_{"Hi, My name is Abhey"}
   this->get_parameter("publish_time", publish_time);
 
   // Creating publisher
-  publisher_ =this->create_publisher<example_interfaces::msg::String>("my_topic", 10);
+  publisher_ = this->create_publisher<example_interfaces::msg::String>("my_topic", 10);
 
-  // Creating timer which calls publishCallback function every 1s
+  // Creating timer which calls publishCallback function every publish_time seconds
   timer_ = this->create_wall_timer(std::chrono::seconds(publish_time),
                                    std::bind(&MyNode::publishCallback, this));
 
@@ -36,7 +42,6 @@ MyNode::MyNode() : Node("my_node"),base_message_{"Hi, My name is Abhey"}
 }
 
 void MyNode::publishCallback() {
-
   if (!publisher_) {
     // Critical failure case: publisher is null
     RCLCPP_FATAL(this->get_logger(), "Publisher not initialized! Node cannot continue.");
@@ -50,8 +55,7 @@ void MyNode::publishCallback() {
 
   // Printing the msg that is published on "my_topic"
   RCLCPP_DEBUG_STREAM(this->get_logger(), "Publishing: " << msg.data);
-  // RCLCPP_INFO(this->get_logger(), "%s", msg.data.c_str());
-
+  
   // publish
   publisher_->publish(msg);
 }
@@ -75,13 +79,18 @@ void MyNode::serverCallback(const example_interfaces::srv::SetBool::Request::Sha
   RCLCPP_DEBUG(this->get_logger(), "Service request processed.");
 }
 
+/**
+ * @brief Main function to initialize and run the ROS2 node
+ * @param argc Number of command line arguments
+ * @param argv Array of command line arguments
+ * @return Exit status
+ */
 int main(int argc, char** argv) {
   // Initializing ros communication
   rclcpp::init(argc, argv);
 
   // Node created
   auto node = std::make_shared<MyNode>();
-
 
   RCLCPP_DEBUG(node->get_logger(), "Publisher Node has started spinning");
 
