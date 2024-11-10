@@ -19,6 +19,9 @@ include_directories(include)
 add_executable(my_node src/my_node.cpp)
 ament_target_dependencies(my_node rclcpp example_interfaces)
 
+add_executable(my_sub src/my_sub.cpp)
+ament_target_dependencies(my_sub rclcpp example_interfaces)
+
 target_include_directories(my_node PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
@@ -26,19 +29,13 @@ target_include_directories(my_node PUBLIC
 
 install(TARGETS
   my_node
+  my_sub
   DESTINATION lib/${PROJECT_NAME}
 )
 
-if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  # the following line skips the linter which checks for copyrights
-  # comment the line when a copyright and license is added to all source files
-  set(ament_cmake_copyright_FOUND TRUE)
-  # the following line skips cpplint (only works in a git repo)
-  # comment the line when this package is in a git repo and when
-  # a copyright and license is added to all source files
-  set(ament_cmake_cpplint_FOUND TRUE)
-  ament_lint_auto_find_test_dependencies()
-endif()
+install(DIRECTORY
+        launch
+        DESTINATION share/${PROJECT_NAME}
+)
 
 ament_package()
