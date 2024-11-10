@@ -7,7 +7,11 @@ def generate_launch_description():
 
     my_pub_node = Node(
         package="beginner_tutorials",
-        executable="my_node"
+        executable="my_node",
+        # default value
+        parameters=[
+            {"publish_time":1}
+        ]
     )
 
     ld.add_action(my_pub_node)

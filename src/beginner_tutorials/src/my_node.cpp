@@ -16,11 +16,16 @@ using std::placeholders::_2;
 // Constructor of MyNode class
 MyNode::MyNode() : Node("my_node"),base_message_{"Hi, My name is Abhey"}
 {
+  // Declare a parameter for publisher time_interval in seconds
+  this->declare_parameter("publish_time", 1);
+  int publish_time;
+  this->get_parameter("publish_time", publish_time);
+
   // Creating publisher
   publisher_ =this->create_publisher<example_interfaces::msg::String>("my_topic", 10);
 
   // Creating timer which calls publishCallback function every 1s
-  timer_ = this->create_wall_timer(std::chrono::seconds(1),
+  timer_ = this->create_wall_timer(std::chrono::seconds(publish_time),
                                    std::bind(&MyNode::publishCallback, this));
 
   // Creating server
