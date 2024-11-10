@@ -1,23 +1,24 @@
-# ROS 2 Publisher Node - MyNode
-
-This project implements a simple ROS 2 node, `MyNode`, that publishes a string message to the topic `my_topic` every second. 
-The message published is "Hi, My name is Abhey." This project uses ROS 2 Humble and includes necessary dependencies for building and running the node.
+# ROS 2 Publisher/Subscriber Tutorial
+This project implements a ROS 2 system with a publisher node (`MyNode`) and a subscriber node (`SubscriberNode`). The publisher sends string messages to the topic `my_topic` and provides a service to update the message content. The subscriber receives and processes these messages.
 
 ## Assumptions and Dependencies
-
-- **ROS 2 Humble**: Make sure ROS 2 Humble is installed and sourced. This project was developed and tested with ROS 2 Humble.
+- **ROS 2 Humble**: This project was developed and tested with ROS 2 Humble. Make sure it's installed and sourced.
 - **C++17 or later**: Required for standard library components used in this code.
 - **Dependencies**:
-  - `rclcpp`: The ROS 2 C++ client library, used for node management, logging, and publishing.
-  - `example_interfaces`: Provides the `String` message type used in this project.
+  - `rclcpp`: The ROS 2 C++ client library for node management, logging, and communication.
+  - `example_interfaces`: Provides the `String` message type and `SetBool` service type.
 
-## Code Overview
+## Features
+### Publisher Node (`MyNode`)
+- Publishes string messages to `my_topic`
+- Configurable publishing rate via ROS parameter
+- Provides a service (`update_publisher`) to modify the published message
+- Includes comprehensive logging at various levels
 
-The `MyNode` class:
-
-- Initializes a publisher to the `my_topic` topic.
-- Sets up a timer to publish a message every second.
-- Logs the published message to the console.
+### Subscriber Node (`SubscriberNode`)
+- Subscribes to messages on `my_topic`
+- Processes received messages with special handling for updated content
+- Implements informative logging
 
 ## Build and Run Instructions
 
@@ -43,14 +44,51 @@ The `MyNode` class:
    cd ~/my_beginner_tutorials
    ```
 
-### 6. Run the Publisher Node:
+### 6. Run the Nodes:
+#### Run the Publisher Node
    ```sh
    ros2 run beginner_tutorials my_node
    ```
+#### Run the Subscriber Node (in a new terminal)
+   ```sh
+   ros2 run beginner_tutorials my_node
+   ```
+### 7. Using the Service:
+The publisher node provides a service to update the published message. You can call it using the command-line tool:
+
+To update the message:
+   ```sh
+   ros2 service call /update_publisher example_interfaces/srv/SetBool "data: true"
+   ```
+
+To revert to the original message:
+   ```sh
+   ros2 service call /update_publisher example_interfaces/srv/SetBool "data: true"
+   ```
+### 8. Launch File Usage
+The package includes a launch file to start both nodes simultaneously. To use it:
+
+   ```sh
+   ros2 launch beginner_tutorials tutorial_launch.py
+   ```
+Launch file parameters:
+* Modify publishing rate:
+
+```sh
+ros2 launch beginner_tutorials tutorial_launch.py publish_time:=2
+```
 
 ## clang-tidy output
-![Screenshot from 2024-11-07 22-55-59](https://github.com/user-attachments/assets/939077c3-5959-4ba4-b9bb-4a448ce4bae3)
 
 
 ## clanglint output
-![Screenshot from 2024-11-07 23-02-07](https://github.com/user-attachments/assets/9ac670d0-c5e1-466e-8aeb-b59ce4812a83)
+
+
+## rqt_console
+
+### INFO
+
+
+### WARN
+
+
