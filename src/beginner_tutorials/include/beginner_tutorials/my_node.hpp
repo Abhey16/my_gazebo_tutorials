@@ -1,8 +1,9 @@
 /**
  * @file my_node.hpp
- * @brief Header file for the MyNode class implementing a ROS2 node with publisher and service
- * @details This class creates a ROS2 node that publishes custom string messages and
- *          provides a service to update the published message
+ * @brief Header file for the MyNode class implementing a ROS2 node with
+ * publisher and service
+ * @details This class creates a ROS2 node that publishes custom string messages
+ * and provides a service to update the published message
  */
 
 #pragma once
@@ -18,15 +19,17 @@
 
 /**
  * @class MyNode
- * @brief A ROS2 node class that implements a string publisher and boolean service
- * @details This node periodically publishes a custom string message and provides
- *          a service to toggle between different message contents
+ * @brief A ROS2 node class that implements a string publisher and boolean
+ * service
+ * @details This node periodically publishes a custom string message and
+ * provides a service to toggle between different message contents
  */
 class MyNode : public rclcpp::Node {
  public:
   /**
    * @brief Constructor for the MyNode class
-   * @details Initializes the publisher, timer, and service server with default configurations
+   * @details Initializes the publisher, timer, and service server with default
+   * configurations
    */
   MyNode();
 
@@ -43,11 +46,15 @@ class MyNode : public rclcpp::Node {
    * @param response SharedPtr to the service response indicating success status
    * @details Updates the base_message_ based on the request's boolean value
    */
-  void serverCallback(const example_interfaces::srv::SetBool::Request::SharedPtr request, 
-                      const example_interfaces::srv::SetBool::Response::SharedPtr response);
+  void serverCallback(
+      const example_interfaces::srv::SetBool::Request::SharedPtr request,
+      const example_interfaces::srv::SetBool::Response::SharedPtr response);
 
-  rclcpp::Publisher<example_interfaces::msg::String>::SharedPtr publisher_; ///< Publisher for string messages
-  rclcpp::TimerBase::SharedPtr timer_; ///< Timer for periodic publishing
-  rclcpp::Service<example_interfaces::srv::SetBool>::SharedPtr server_; ///< Service server for message updates
-  std::string base_message_; ///< Storage for the current message to be published
+  rclcpp::Publisher<example_interfaces::msg::String>::SharedPtr
+      publisher_;                       ///< Publisher for string messages
+  rclcpp::TimerBase::SharedPtr timer_;  ///< Timer for periodic publishing
+  rclcpp::Service<example_interfaces::srv::SetBool>::SharedPtr
+      server_;  ///< Service server for message updates
+  std::string
+      base_message_;  ///< Storage for the current message to be published
 };
