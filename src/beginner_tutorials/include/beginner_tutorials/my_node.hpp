@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <string>
+
 #include <example_interfaces/msg/detail/string__struct.hpp>
 #include <example_interfaces/msg/string.hpp>
 #include <example_interfaces/srv/detail/set_bool__struct.hpp>
@@ -17,7 +19,7 @@
 #include <rclcpp/service.hpp>
 #include <rclcpp/timer.hpp>
 
-/**
+/*
  * @class MyNode
  * @brief A ROS2 node class that implements a string publisher and boolean
  * service

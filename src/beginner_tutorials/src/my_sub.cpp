@@ -11,8 +11,10 @@
 
 #include "beginner_tutorials/my_sub.hpp"
 
-#include <example_interfaces/msg/detail/string__struct.hpp>
 #include <memory>
+
+#include <example_interfaces/msg/detail/string__struct.hpp>
+
 #include <rclcpp/logging.hpp>
 
 SubscriberNode::SubscriberNode() : Node("my_sub") {
