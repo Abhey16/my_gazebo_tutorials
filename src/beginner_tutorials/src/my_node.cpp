@@ -134,7 +134,7 @@ int main(int argc, char** argv) {
   auto logger = rclcpp::get_logger("logger");
 
   // Obtain parameters from command line arguments
-  if (argc != 8) {
+  if (argc< 8) {
     RCLCPP_INFO(
       logger, "Invalid number of parameters\nusage: "
       "$ ros2 run learning_tf2_cpp static_turtle_tf2_broadcaster "

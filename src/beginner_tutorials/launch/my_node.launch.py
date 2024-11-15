@@ -12,10 +12,7 @@ def generate_launch_description():
         parameters=[
             {"publish_time":1}
         ],
-        arguments = ['--x', '1', '--y', '1', '--z', '3', 
-                     '--yaw', '1.57', '--pitch', '1.57', '--roll', '0', 
-                     '--frame-id', 'world', 
-                     '--child-frame-id', 'talk']
+        arguments = ['talk', '1', '1', '3', '0', '1.57', '1.57']
     )
 
     my_sub_node = Node(
