@@ -13,14 +13,25 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(example_interfaces REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
 
 include_directories(include)
 
 add_executable(my_node src/my_node.cpp)
-ament_target_dependencies(my_node rclcpp example_interfaces)
+ament_target_dependencies(my_node 
+                          rclcpp 
+                          example_interfaces
+                          geometry_msgs
+                          tf2
+                          tf2_ros
+                          )
 
 add_executable(my_sub src/my_sub.cpp)
-ament_target_dependencies(my_sub rclcpp example_interfaces)
+ament_target_dependencies(my_sub 
+                          rclcpp 
+                          example_interfaces)
 
 target_include_directories(my_node PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

@@ -18,6 +18,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp/service.hpp>
 #include <rclcpp/timer.hpp>
+#include <tf2_ros/static_transform_broadcaster.h>
 
 /*
  * @class MyNode
@@ -33,7 +34,7 @@ class MyNode : public rclcpp::Node {
    * @details Initializes the publisher, timer, and service server with default
    * configurations
    */
-  MyNode();
+  MyNode(char * transformation[]);
 
  private:
   /**
@@ -59,4 +60,8 @@ class MyNode : public rclcpp::Node {
       server_;  ///< Service server for message updates
   std::string
       base_message_;  ///< Storage for the current message to be published
+  std::shared_ptr<tf2_ros::StaticTransformBroadcaster> tf_static_broadcaster_; // broadcaster
+
+  void make_transforms(char * transformation[]);
 };
+

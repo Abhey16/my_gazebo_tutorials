@@ -9,26 +9,20 @@
  *          constructor, callbacks, and main function
  */
 
-// #include "beginner_tutorials/my_node.hpp"
-
-// #include <chrono>
-// #include <example_interfaces/msg/detail/string__struct.hpp>
-// #include <example_interfaces/srv/detail/set_bool__struct.hpp>
-// #include <example_interfaces/srv/set_bool.hpp>
-// #include <functional>
-// #include <memory>
-// #include <rclcpp/logging.hpp>
-// #include <rclcpp/utilities.hpp>
-
 #include "beginner_tutorials/my_node.hpp"
 
 #include <chrono>
+#include <cstdlib>
 #include <functional>
+#include <geometry_msgs/msg/detail/transform_stamped__struct.hpp>
 #include <memory>
 
 #include <example_interfaces/msg/detail/string__struct.hpp>
 #include <example_interfaces/srv/detail/set_bool__struct.hpp>
 #include <example_interfaces/srv/set_bool.hpp>
+#include "geometry_msgs/msg/transform_stamped.hpp"
+#include "tf2/LinearMath/Quaternion.h"
+#include "tf2_ros/static_transform_broadcaster.h"
 
 #include <rclcpp/logging.hpp>
 #include <rclcpp/utilities.hpp>
@@ -37,7 +31,7 @@
 using std::placeholders::_1;
 using std::placeholders::_2;
 
-MyNode::MyNode() : Node("my_node"), base_message_{"Hi, My name is Abhey"} {
+MyNode::MyNode(char * transformation[]) : Node("my_node"), base_message_{"Hi, My name is Abhey"} {
   // Declare a parameter for publisher time_interval in seconds
   this->declare_parameter("publish_time", 1);
   int publish_time;
@@ -56,7 +50,13 @@ MyNode::MyNode() : Node("my_node"), base_message_{"Hi, My name is Abhey"} {
   server_ = this->create_service<example_interfaces::srv::SetBool>(
       "update_publisher", std::bind(&MyNode::serverCallback, this, _1, _2));
 
-  RCLCPP_INFO(this->get_logger(), "Server and Publisher Created");
+  // Creating broadcaster
+  tf_static_broadcaster_ = std::make_shared<tf2_ros::StaticTransformBroadcaster>(this);
+
+  // Broadcasting
+  this -> make_transforms(transformation);
+
+  RCLCPP_INFO(this->get_logger(), "Server, Publisher and Broadcaster Created");
 }
 
 void MyNode::publishCallback() {
@@ -96,6 +96,33 @@ void MyNode::serverCallback(
   RCLCPP_DEBUG(this->get_logger(), "Service request processed.");
 }
 
+void MyNode::make_transforms(char * transformation[])
+{
+  geometry_msgs::msg::TransformStamped t;
+
+  t.header.stamp = this->get_clock()->now();
+  t.header.frame_id = "world";
+  t.child_frame_id = transformation[1];
+
+  t.transform.translation.x = atof(transformation[2]);
+  t.transform.translation.y = atof(transformation[3]);
+  t.transform.translation.z = atof(transformation[4]);
+
+  tf2::Quaternion q;
+
+  q.setRPY(atof(transformation[5]), 
+          atof(transformation[6]), 
+            atof(transformation[7]));
+
+  t.transform.rotation.w = q.w();
+  t.transform.rotation.x = q.x();
+  t.transform.rotation.y = q.y();
+  t.transform.rotation.z = q.z();
+
+  tf_static_broadcaster_->sendTransform(t);
+}
+
+
 /**
  * @brief Main function to initialize and run the ROS2 node
  * @param argc Number of command line arguments
@@ -103,11 +130,30 @@ void MyNode::serverCallback(
  * @return Exit status
  */
 int main(int argc, char** argv) {
+
+  auto logger = rclcpp::get_logger("logger");
+
+  // Obtain parameters from command line arguments
+  if (argc != 8) {
+    RCLCPP_INFO(
+      logger, "Invalid number of parameters\nusage: "
+      "$ ros2 run learning_tf2_cpp static_turtle_tf2_broadcaster "
+      "child_frame_name x y z roll pitch yaw");
+    return 1;
+  }
+
+  // As the parent frame of the transform is `world`, it is
+  // necessary to check that the frame name passed is different
+  if (strcmp(argv[1], "world") == 0) {
+    RCLCPP_INFO(logger, "Your static turtle name cannot be 'world'");
+    return 2;
+  }
+
   // Initializing ros communication
   rclcpp::init(argc, argv);
 
   // Node created
-  auto node = std::make_shared<MyNode>();
+  auto node = std::make_shared<MyNode>(argv);
 
   RCLCPP_DEBUG(node->get_logger(), "Publisher Node has started spinning");
 
