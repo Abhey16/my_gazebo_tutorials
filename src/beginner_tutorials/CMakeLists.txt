@@ -70,6 +70,7 @@ install(TARGETS
 
 install(DIRECTORY
         launch
+        results
         DESTINATION share/${PROJECT_NAME}
 )
 
