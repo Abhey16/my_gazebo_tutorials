@@ -11,7 +11,8 @@ def generate_launch_description():
         # default value
         parameters=[
             {"publish_time":1}
-        ]
+        ],
+        arguments = ['talk', '1', '1', '3', '0', '1.57', '1.57']
     )
 
     my_sub_node = Node(

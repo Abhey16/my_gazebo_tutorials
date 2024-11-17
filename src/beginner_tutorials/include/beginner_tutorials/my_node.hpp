@@ -8,7 +8,10 @@
 
 #pragma once
 
+#include <tf2_ros/static_transform_broadcaster.h>
+
 #include <string>
+#include <memory>
 
 #include <example_interfaces/msg/detail/string__struct.hpp>
 #include <example_interfaces/msg/string.hpp>
@@ -33,7 +36,7 @@ class MyNode : public rclcpp::Node {
    * @details Initializes the publisher, timer, and service server with default
    * configurations
    */
-  MyNode();
+  explicit MyNode(char* transformation[]);
 
  private:
   /**
@@ -59,4 +62,8 @@ class MyNode : public rclcpp::Node {
       server_;  ///< Service server for message updates
   std::string
       base_message_;  ///< Storage for the current message to be published
+  std::shared_ptr<tf2_ros::StaticTransformBroadcaster>
+      tf_static_broadcaster_;  // broadcaster
+
+  void make_transforms(char* transformation[]);
 };

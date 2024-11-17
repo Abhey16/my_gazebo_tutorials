@@ -1,24 +1,36 @@
-# ROS 2 Publisher/Subscriber Tutorial
+# ROS 2 Tutorial
+
 This project implements a ROS 2 system with a publisher node (`MyNode`) and a subscriber node (`SubscriberNode`). The publisher sends string messages to the topic `my_topic` and provides a service to update the message content. The subscriber receives and processes these messages.
 
+---
+
 ## Assumptions and Dependencies
-- **ROS 2 Humble**: This project was developed and tested with ROS 2 Humble. Make sure it's installed and sourced.
+- **ROS 2 Humble**: This project was developed and tested with ROS 2 Humble. Ensure it's installed and sourced.
 - **C++17 or later**: Required for standard library components used in this code.
 - **Dependencies**:
-  - `rclcpp`: The ROS 2 C++ client library for node management, logging, and communication.
+  - `rclcpp`: ROS 2 C++ client library for node management, logging, and communication.
   - `example_interfaces`: Provides the `String` message type and `SetBool` service type.
+  - `tf2_ros`: Required for handling transforms.
+  - `rosbag2`: For recording and replaying bag files.
+
+---
 
 ## Features
 ### Publisher Node (`MyNode`)
-- Publishes string messages to `my_topic`
-- Configurable publishing rate via ROS parameter
-- Provides a service (`update_publisher`) to modify the published message
-- Includes comprehensive logging at various levels
+- Publishes string messages to `my_topic`.
+- Configurable publishing rate via ROS parameters.
+- Provides a service (`update_publisher`) to modify the published message.
+- Includes comprehensive logging at various levels.
 
 ### Subscriber Node (`SubscriberNode`)
-- Subscribes to messages on `my_topic`
-- Processes received messages with special handling for updated content
-- Implements informative logging
+- Subscribes to messages on `my_topic`.
+- Processes received messages with special handling for updated content.
+- Implements informative logging.
+
+### Transform Broadcasting
+- Publishes a transform with the parent frame `world` and child frame `talk`.
+
+---
 
 ## Build and Run Instructions
 
@@ -78,12 +90,67 @@ Launch file parameters:
 ros2 launch beginner_tutorials tutorial_launch.py publish_time:=2
 ```
 
+### 9. Working with Bag Files
+#### Record Bag Files
+To record a bag file for 15 seconds:
+
+   ```sh
+   ros2 launch beginner_tutorials ros_bags.launch.py record_bag:=True
+   ```
+The recorded bag files will be stored in the results/bag_files directory of beginner_tutorials package.
+
+#### Inspect Bag Files
+To inspect the recorded bag file:
+
+   ```sh
+   ros2 bag info <path_to_package>/src/results/bag_files
+   ```
+
+#### Playback Bag Files
+To play back a recorded bag file:
+
+   ```sh
+   ros2 bag play <path_to_package>/src/results/bag_files/<bag_file_name>
+   ```
+
+#### Verify Playback with Listener Node
+Run the subscriber node during playback to verify the recorded messages:
+   ```sh
+   ros2 run beginner_tutorials subscriber_node
+   ```
+
+### 10. Working with Bag Files
+#### View Transform Frames
+To list the TF frames in the system:
+   ```sh
+   ros2 run tf2_tools view_frames
+   ```
+#### Echo Transform
+To observe the transform from world to talk:
+   ```sh
+   ros2 run tf2_ros tf2_echo world talk
+   ```
+### 11. ROS Testing
+#### Run ROS Tests
+The package includes unit tests. Run them using:
+   ```sh
+   colcon test --packages-select beginner_tutorials
+   ```
+
+#### Alternate way of running test
+Run the following in root of workspace
+   ```sh
+   ./build/beginner_tutorials/my_node_test
+   ```
+
+
 ## clang-tidy output
-![clang-tidy](https://github.com/user-attachments/assets/21864b94-3c91-45cf-bb19-c11420b19348)
+![clang-tidy](https://github.com/user-attachments/assets/4df1e261-4c23-47bb-9be6-8a15c8e70992)
+
 
 
 ## clanglint output
-![cpplint](https://github.com/user-attachments/assets/aa165bc3-033a-4acd-95c8-9e7eaefe9971)
+![cpplint](https://github.com/user-attachments/assets/1a66fe5d-c45e-4298-8f5d-6ad4509ba13e)
 
 
 ## rqt_console
