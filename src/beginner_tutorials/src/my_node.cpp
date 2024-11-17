@@ -6,31 +6,41 @@
  * @file my_node.cpp
  * @brief Implementation file for the MyNode class.
  * @details Contains the implementation of the MyNode class methods including
- *          the constructor, callbacks, and the main function to run the ROS 2 node.
+ *          the constructor, callbacks, and the main function to run the ROS 2
+ * node.
  */
+
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2_ros/static_transform_broadcaster.h>
+
+// C system headers
+#include <cstdlib>
+
+// C++ system headers
+#include <chrono>  // NOLINT(build/c++11)
+#include <functional>
+#include <memory>
 
 #include "beginner_tutorials/my_node.hpp"
 
-#include <chrono>
-#include <cstdlib>
-#include <functional>
-#include <geometry_msgs/msg/detail/transform_stamped__struct.hpp>
-#include <memory>
+// Other library headers
 #include <example_interfaces/msg/detail/string__struct.hpp>
 #include <example_interfaces/srv/detail/set_bool__struct.hpp>
 #include <example_interfaces/srv/set_bool.hpp>
-#include "geometry_msgs/msg/transform_stamped.hpp"
-#include "tf2/LinearMath/Quaternion.h"
-#include "tf2_ros/static_transform_broadcaster.h"
+#include <geometry_msgs/msg/detail/transform_stamped__struct.hpp>
+#include <geometry_msgs/msg/transform_stamped.hpp>
 #include <rclcpp/logging.hpp>
 #include <rclcpp/utilities.hpp>
+
+
 
 using std::placeholders::_1;
 using std::placeholders::_2;
 
 /**
  * @brief Constructor for MyNode.
- * @param transformation Array of command-line arguments for transformation parameters.
+ * @param transformation Array of command-line arguments for transformation
+ * parameters.
  */
 MyNode::MyNode(char* transformation[])
     : Node("my_node"), base_message_{"Hi, My name is Abhey"} {
@@ -40,19 +50,21 @@ MyNode::MyNode(char* transformation[])
   this->get_parameter("publish_time", publish_time);
 
   // Creating publisher
-  publisher_ = this->create_publisher<example_interfaces::msg::String>("my_topic", 10);
+  publisher_ =
+      this->create_publisher<example_interfaces::msg::String>("my_topic", 10);
 
-  // Creating timer which calls publishCallback function every publish_time seconds
-  timer_ = this->create_wall_timer(
-      std::chrono::seconds(publish_time),
-      std::bind(&MyNode::publishCallback, this));
+  // Creating timer which calls publishCallback function every publish_time
+  // seconds
+  timer_ = this->create_wall_timer(std::chrono::seconds(publish_time),
+                                   std::bind(&MyNode::publishCallback, this));
 
   // Creating server
   server_ = this->create_service<example_interfaces::srv::SetBool>(
       "update_publisher", std::bind(&MyNode::serverCallback, this, _1, _2));
 
   // Creating broadcaster
-  tf_static_broadcaster_ = std::make_shared<tf2_ros::StaticTransformBroadcaster>(this);
+  tf_static_broadcaster_ =
+      std::make_shared<tf2_ros::StaticTransformBroadcaster>(this);
 
   // Broadcasting
   this->make_transforms(transformation);
@@ -62,7 +74,8 @@ MyNode::MyNode(char* transformation[])
 
 /**
  * @brief Publishes a message to the topic.
- * @details Uses the current base message and publishes it to the "my_topic" topic.
+ * @details Uses the current base message and publishes it to the "my_topic"
+ * topic.
  */
 void MyNode::publishCallback() {
   if (!publisher_) {
@@ -123,8 +136,7 @@ void MyNode::make_transforms(char* transformation[]) {
 
   tf2::Quaternion q;
 
-  q.setRPY(atof(transformation[5]),
-           atof(transformation[6]),
+  q.setRPY(atof(transformation[5]), atof(transformation[6]),
            atof(transformation[7]));
 
   t.transform.rotation.w = q.w();
@@ -146,8 +158,8 @@ int main(int argc, char** argv) {
 
   // Obtain parameters from command line arguments
   if (argc < 8) {
-    RCLCPP_INFO(
-        logger, "Invalid number of parameters\nusage: "
+    RCLCPP_INFO(logger,
+                "Invalid number of parameters\nusage: "
                 "$ ros2 run learning_tf2_cpp static_turtle_tf2_broadcaster "
                 "child_frame_name x y z roll pitch yaw");
     return 1;
