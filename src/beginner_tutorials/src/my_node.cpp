@@ -4,9 +4,9 @@
 
 /**
  * @file my_node.cpp
- * @brief Implementation file for the MyNode class
+ * @brief Implementation file for the MyNode class.
  * @details Contains the implementation of the MyNode class methods including
- *          constructor, callbacks, and main function
+ *          the constructor, callbacks, and the main function to run the ROS 2 node.
  */
 
 #include "beginner_tutorials/my_node.hpp"
@@ -16,35 +16,36 @@
 #include <functional>
 #include <geometry_msgs/msg/detail/transform_stamped__struct.hpp>
 #include <memory>
-
 #include <example_interfaces/msg/detail/string__struct.hpp>
 #include <example_interfaces/srv/detail/set_bool__struct.hpp>
 #include <example_interfaces/srv/set_bool.hpp>
 #include "geometry_msgs/msg/transform_stamped.hpp"
 #include "tf2/LinearMath/Quaternion.h"
 #include "tf2_ros/static_transform_broadcaster.h"
-
 #include <rclcpp/logging.hpp>
 #include <rclcpp/utilities.hpp>
-
 
 using std::placeholders::_1;
 using std::placeholders::_2;
 
-MyNode::MyNode(char * transformation[]) : Node("my_node"), base_message_{"Hi, My name is Abhey"} {
+/**
+ * @brief Constructor for MyNode.
+ * @param transformation Array of command-line arguments for transformation parameters.
+ */
+MyNode::MyNode(char* transformation[])
+    : Node("my_node"), base_message_{"Hi, My name is Abhey"} {
   // Declare a parameter for publisher time_interval in seconds
   this->declare_parameter("publish_time", 1);
   int publish_time;
   this->get_parameter("publish_time", publish_time);
 
   // Creating publisher
-  publisher_ =
-      this->create_publisher<example_interfaces::msg::String>("my_topic", 10);
+  publisher_ = this->create_publisher<example_interfaces::msg::String>("my_topic", 10);
 
-  // Creating timer which calls publishCallback function every publish_time
-  // seconds
-  timer_ = this->create_wall_timer(std::chrono::seconds(publish_time),
-                                   std::bind(&MyNode::publishCallback, this));
+  // Creating timer which calls publishCallback function every publish_time seconds
+  timer_ = this->create_wall_timer(
+      std::chrono::seconds(publish_time),
+      std::bind(&MyNode::publishCallback, this));
 
   // Creating server
   server_ = this->create_service<example_interfaces::srv::SetBool>(
@@ -54,11 +55,15 @@ MyNode::MyNode(char * transformation[]) : Node("my_node"), base_message_{"Hi, My
   tf_static_broadcaster_ = std::make_shared<tf2_ros::StaticTransformBroadcaster>(this);
 
   // Broadcasting
-  this -> make_transforms(transformation);
+  this->make_transforms(transformation);
 
   RCLCPP_INFO(this->get_logger(), "Server, Publisher and Broadcaster Created");
 }
 
+/**
+ * @brief Publishes a message to the topic.
+ * @details Uses the current base message and publishes it to the "my_topic" topic.
+ */
 void MyNode::publishCallback() {
   if (!publisher_) {
     // Critical failure case: publisher is null
@@ -75,10 +80,15 @@ void MyNode::publishCallback() {
   // Printing the msg that is published on "my_topic"
   RCLCPP_DEBUG_STREAM(this->get_logger(), "Publishing: " << msg.data);
 
-  // publish
+  // Publish
   publisher_->publish(msg);
 }
 
+/**
+ * @brief Callback function for the update_publisher service.
+ * @param request Shared pointer to the service request.
+ * @param response Shared pointer to the service response.
+ */
 void MyNode::serverCallback(
     const example_interfaces::srv::SetBool::Request::SharedPtr request,
     const example_interfaces::srv::SetBool::Response::SharedPtr response) {
@@ -96,8 +106,11 @@ void MyNode::serverCallback(
   RCLCPP_DEBUG(this->get_logger(), "Service request processed.");
 }
 
-void MyNode::make_transforms(char * transformation[])
-{
+/**
+ * @brief Creates and broadcasts a static transformation.
+ * @param transformation Array containing transformation parameters.
+ */
+void MyNode::make_transforms(char* transformation[]) {
   geometry_msgs::msg::TransformStamped t;
 
   t.header.stamp = this->get_clock()->now();
@@ -110,9 +123,9 @@ void MyNode::make_transforms(char * transformation[])
 
   tf2::Quaternion q;
 
-  q.setRPY(atof(transformation[5]), 
-          atof(transformation[6]), 
-            atof(transformation[7]));
+  q.setRPY(atof(transformation[5]),
+           atof(transformation[6]),
+           atof(transformation[7]));
 
   t.transform.rotation.w = q.w();
   t.transform.rotation.x = q.x();
@@ -122,23 +135,21 @@ void MyNode::make_transforms(char * transformation[])
   tf_static_broadcaster_->sendTransform(t);
 }
 
-
 /**
- * @brief Main function to initialize and run the ROS2 node
- * @param argc Number of command line arguments
- * @param argv Array of command line arguments
- * @return Exit status
+ * @brief Main function to initialize and run the ROS 2 node.
+ * @param argc Number of command-line arguments.
+ * @param argv Array of command-line arguments.
+ * @return Exit status.
  */
 int main(int argc, char** argv) {
-
   auto logger = rclcpp::get_logger("logger");
 
   // Obtain parameters from command line arguments
-  if (argc< 8) {
+  if (argc < 8) {
     RCLCPP_INFO(
-      logger, "Invalid number of parameters\nusage: "
-      "$ ros2 run learning_tf2_cpp static_turtle_tf2_broadcaster "
-      "child_frame_name x y z roll pitch yaw");
+        logger, "Invalid number of parameters\nusage: "
+                "$ ros2 run learning_tf2_cpp static_turtle_tf2_broadcaster "
+                "child_frame_name x y z roll pitch yaw");
     return 1;
   }
 
@@ -149,7 +160,7 @@ int main(int argc, char** argv) {
     return 2;
   }
 
-  // Initializing ros communication
+  // Initializing ROS communication
   rclcpp::init(argc, argv);
 
   // Node created
@@ -160,7 +171,7 @@ int main(int argc, char** argv) {
   // Keeping the node alive
   rclcpp::spin(node);
 
-  // killing the node
+  // Killing the node
   rclcpp::shutdown();
 
   return 0;
