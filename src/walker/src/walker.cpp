@@ -1,6 +1,16 @@
+/**
+ * @file walker.cpp
+ * @brief Implementation of the RobotController and its states for obstacle avoidance.
+ */
+
 #include "walker/walker.hpp"
 
-// Constructor for RobotController
+/**
+ * @brief Constructor for the RobotController class.
+ * 
+ * Initializes the ROS 2 node, sets up subscriptions for laser scan data,
+ * publishers for velocity commands, and the initial robot state.
+ */
 RobotController::RobotController() : Node("robot_controller"), turn_clockwise_(true) {
   laser_subscription_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
       "/scan", 10, std::bind(&RobotController::laserScanCallback, this, std::placeholders::_1));
@@ -10,19 +20,29 @@ RobotController::RobotController() : Node("robot_controller"), turn_clockwise_(t
   active_state_ = std::make_shared<ForwardState>();
 }
 
-// Set the current state of the robot
+/**
+ * @brief Sets the current state of the robot.
+ * @param state Shared pointer to the new robot state.
+ */
 void RobotController::setState(std::shared_ptr<RobotState> state) {
   active_state_ = state;
 }
 
-// Perform state execution
+/**
+ * @brief Executes the logic of the current robot state.
+ */
 void RobotController::process() {
   if (active_state_) {
     active_state_->execute(*this);
   }
 }
 
-// Publish velocity commands to drive the robot
+/**
+ * @brief Publishes velocity commands to drive the robot.
+ * 
+ * @param linear_speed Linear velocity in meters per second.
+ * @param angular_speed Angular velocity in radians per second.
+ */
 void RobotController::drive(double linear_speed, double angular_speed) {
   geometry_msgs::msg::Twist twist_message;
   twist_message.linear.x = linear_speed;
@@ -30,18 +50,31 @@ void RobotController::drive(double linear_speed, double angular_speed) {
   velocity_publisher_->publish(twist_message);
 }
 
-// Check if an obstacle is detected
+/**
+ * @brief Checks if an obstacle is detected nearby.
+ * @return True if an obstacle is detected; false otherwise.
+ */
 bool RobotController::isObstacleNearby() const {
   return obstacle_present_;
 }
 
-// Toggle the turn direction (clockwise or counterclockwise)
+/**
+ * @brief Toggles the robot's turn direction.
+ * @return True if the robot will now turn clockwise; false if counterclockwise.
+ */
 bool RobotController::switchTurnDirection() {
   turn_clockwise_ = !turn_clockwise_;
   return turn_clockwise_;
 }
 
-// Callback for processing laser scan data
+/**
+ * @brief Callback for processing laser scan data.
+ * 
+ * Determines if an obstacle is nearby by analyzing the laser scan ranges.
+ * If an obstacle is detected, updates the obstacle flag and triggers state execution.
+ * 
+ * @param msg Shared pointer to the LaserScan message.
+ */
 void RobotController::laserScanCallback(const sensor_msgs::msg::LaserScan::SharedPtr msg) {
   obstacle_present_ = false;
 
@@ -60,7 +93,14 @@ void RobotController::laserScanCallback(const sensor_msgs::msg::LaserScan::Share
   process();
 }
 
-// Handle logic in the ForwardState
+/**
+ * @brief Executes the logic for the ForwardState.
+ * 
+ * The robot moves forward unless an obstacle is detected, in which case
+ * it transitions to the TurnState.
+ * 
+ * @param controller Reference to the RobotController managing the robot.
+ */
 void ForwardState::execute(RobotController& controller) {
   if (controller.isObstacleNearby()) {
     controller.setState(std::make_shared<TurnState>(controller.switchTurnDirection()));
@@ -69,7 +109,14 @@ void ForwardState::execute(RobotController& controller) {
   }
 }
 
-// Handle logic in the TurnState
+/**
+ * @brief Executes the logic for the TurnState.
+ * 
+ * The robot turns in a specified direction until the obstacle is no longer detected,
+ * then transitions back to the ForwardState.
+ * 
+ * @param controller Reference to the RobotController managing the robot.
+ */
 void TurnState::execute(RobotController& controller) {
   if (!controller.isObstacleNearby()) {
     controller.setState(std::make_shared<ForwardState>());
@@ -79,7 +126,13 @@ void TurnState::execute(RobotController& controller) {
   }
 }
 
-// Main function to start the node
+/**
+ * @brief Main function to initialize and run the RobotController node.
+ * 
+ * @param argc Number of command-line arguments.
+ * @param argv Array of command-line arguments.
+ * @return Exit status of the program.
+ */
 int main(int argc, char** argv) {
   rclcpp::init(argc, argv);
   auto controller = std::make_shared<RobotController>();
