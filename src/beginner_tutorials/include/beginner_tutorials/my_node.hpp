@@ -10,16 +10,18 @@
 
 #include <tf2_ros/static_transform_broadcaster.h>
 
+#include <string>
+#include <memory>
+
 #include <example_interfaces/msg/detail/string__struct.hpp>
 #include <example_interfaces/msg/string.hpp>
 #include <example_interfaces/srv/detail/set_bool__struct.hpp>
-#include <memory>
 #include <rclcpp/node.hpp>
 #include <rclcpp/publisher.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp/service.hpp>
 #include <rclcpp/timer.hpp>
-#include <string>
+
 
 /*
  * @class MyNode

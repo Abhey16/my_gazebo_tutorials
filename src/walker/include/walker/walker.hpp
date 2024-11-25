@@ -10,9 +10,8 @@
  */
 
 #pragma once
-
-#include <geometry_msgs/msg/twist.hpp>
 #include <memory>
+#include <geometry_msgs/msg/twist.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/laser_scan.hpp>
 
@@ -34,7 +33,9 @@ class RobotState {
    * @brief Pure virtual function to handle state-specific logic.
    * @param controller Reference to the RobotController managing the robot.
    */
-  virtual void execute(RobotController& controller) = 0;
+  // Intentionally modifying the RobotController.
+  virtual void execute(RobotController& controller) = 0;  // NOLINT
+  // (runtime/references)
 };
 
 /**
