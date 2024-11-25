@@ -32,8 +32,6 @@
 #include <rclcpp/logging.hpp>
 #include <rclcpp/utilities.hpp>
 
-
-
 using std::placeholders::_1;
 using std::placeholders::_2;
 

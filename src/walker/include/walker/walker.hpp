@@ -5,13 +5,14 @@
 /**
  * @file walker.hpp
  * @brief Contains the definitions of the RobotController and RobotState classes
- *        and their derived classes for implementing a state design pattern in a robot.
+ *        and their derived classes for implementing a state design pattern in a
+ * robot.
  */
 
 #pragma once
 
-#include <memory>
 #include <geometry_msgs/msg/twist.hpp>
+#include <memory>
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/laser_scan.hpp>
 
@@ -23,7 +24,7 @@ class RobotController;
  * @brief Abstract base class representing a state of the robot.
  */
 class RobotState {
-public:
+ public:
   /**
    * @brief Virtual destructor for the RobotState class.
    */
@@ -41,7 +42,7 @@ public:
  * @brief Represents the robot state when it is moving forward.
  */
 class ForwardState : public RobotState {
-public:
+ public:
   /**
    * @brief Executes the behavior for the forward-moving state.
    * @param controller Reference to the RobotController managing the robot.
@@ -54,10 +55,11 @@ public:
  * @brief Represents the robot state when it is turning to avoid obstacles.
  */
 class TurnState : public RobotState {
-public:
+ public:
   /**
    * @brief Constructor for TurnState.
-   * @param clockwise If true, the robot turns clockwise; otherwise, counterclockwise.
+   * @param clockwise If true, the robot turns clockwise; otherwise,
+   * counterclockwise.
    */
   explicit TurnState(bool clockwise) : turn_clockwise_(clockwise) {}
 
@@ -67,8 +69,8 @@ public:
    */
   void execute(RobotController& controller) override;
 
-private:
-  bool turn_clockwise_; ///< Indicates the direction of the turn.
+ private:
+  bool turn_clockwise_;  ///< Indicates the direction of the turn.
 };
 
 /**
@@ -76,7 +78,7 @@ private:
  * @brief Main controller class for the robot, managing its states and sensors.
  */
 class RobotController : public rclcpp::Node {
-public:
+ public:
   /**
    * @brief Constructs a RobotController node.
    */
@@ -112,17 +114,21 @@ public:
    */
   bool switchTurnDirection();
 
-private:
+ private:
   /**
    * @brief Callback function for processing laser scan data.
    * @param msg Shared pointer to the received LaserScan message.
    */
   void laserScanCallback(const sensor_msgs::msg::LaserScan::SharedPtr msg);
 
-  rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr laser_subscription_; ///< Subscription to laser scan data.
-  rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr velocity_publisher_; ///< Publisher for velocity commands.
+  rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr
+      laser_subscription_;  ///< Subscription to laser scan data.
+  rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr
+      velocity_publisher_;  ///< Publisher for velocity commands.
 
-  std::shared_ptr<RobotState> active_state_; ///< Pointer to the current active state.
-  bool obstacle_present_{false}; ///< Flag indicating if an obstacle is detected.
-  bool turn_clockwise_{true}; ///< Current turning direction.
+  std::shared_ptr<RobotState>
+      active_state_;  ///< Pointer to the current active state.
+  bool obstacle_present_{
+      false};                  ///< Flag indicating if an obstacle is detected.
+  bool turn_clockwise_{true};  ///< Current turning direction.
 };
