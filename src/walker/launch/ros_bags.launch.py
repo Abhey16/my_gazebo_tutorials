@@ -50,15 +50,15 @@ def generate_launch_description():
         description='Enable/disable ROS 2 bag recording'
     )
 
-    # Gazebo server and client
-    gzserver_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(gazebo_ros_share, 'launch', 'gzserver.launch.py')),
-        launch_arguments={'world': world_path}.items()
-    )
+    # # Gazebo server and client
+    # gzserver_cmd = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource(os.path.join(gazebo_ros_share, 'launch', 'gzserver.launch.py')),
+    #     launch_arguments={'world': world_path}.items()
+    # )
 
-    gzclient_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(gazebo_ros_share, 'launch', 'gzclient.launch.py'))
-    )
+    # gzclient_cmd = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource(os.path.join(gazebo_ros_share, 'launch', 'gzclient.launch.py'))
+    # )
 
     # Robot state publisher
     robot_state_publisher_cmd = IncludeLaunchDescription(
@@ -98,8 +98,8 @@ def generate_launch_description():
 
     # Add all actions and nodes
     ld.add_action(record_bag_arg)
-    ld.add_action(gzserver_cmd)
-    ld.add_action(gzclient_cmd)
+    # ld.add_action(gzserver_cmd)
+    # ld.add_action(gzclient_cmd)
     ld.add_action(robot_state_publisher_cmd)
     ld.add_action(spawn_robot_cmd)
     ld.add_action(walker_node)
