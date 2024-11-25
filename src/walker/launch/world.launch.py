@@ -5,6 +5,7 @@ from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
 
 
 def generate_launch_description():
@@ -58,9 +59,15 @@ def generate_launch_description():
         }.items()
     )
 
+    walker_node = Node(
+        package="walker",
+        executable="walker_node"
+        )
+
     ld = LaunchDescription()
 
     # Add the commands to the launch description
+    ld.add_action(walker_node)
     ld.add_action(gzserver_cmd)
     ld.add_action(gzclient_cmd)
     ld.add_action(robot_state_publisher_cmd)
