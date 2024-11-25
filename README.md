@@ -2,6 +2,8 @@
 
 This project implements a ROS 2 system with a publisher node (`MyNode`) and a subscriber node (`SubscriberNode`). The publisher sends string messages to the topic `my_topic` and provides a service to update the message content. The subscriber receives and processes these messages.
 
+Additionally, the walker package includes algorithms for controlling robot movement, enabling the robot to execute walking commands.
+
 ---
 
 ## Assumptions and Dependencies
@@ -12,6 +14,7 @@ This project implements a ROS 2 system with a publisher node (`MyNode`) and a su
   - `example_interfaces`: Provides the `String` message type and `SetBool` service type.
   - `tf2_ros`: Required for handling transforms.
   - `rosbag2`: For recording and replaying bag files.
+  - `walker`: Provides robot movement control algorithms.
 
 ---
 
@@ -29,6 +32,11 @@ This project implements a ROS 2 system with a publisher node (`MyNode`) and a su
 
 ### Transform Broadcasting
 - Publishes a transform with the parent frame `world` and child frame `talk`.
+
+### Walker Package (walker)
+- Implements algorithms for controlling robot movement.
+- Includes a RobotController class to manage robot's walking actions.
+- Provides the Walker class to execute walking commands, improving robot navigation.
 
 ---
 
@@ -65,6 +73,11 @@ This project implements a ROS 2 system with a publisher node (`MyNode`) and a su
    ```sh
    ros2 run beginner_tutorials my_node
    ```
+
+#### Run the Walker Algorithm (in a new terminal)
+   ```sh
+   ros2 run walker walker_node
+   ```
 ### 7. Using the Service:
 The publisher node provides a service to update the published message. You can call it using the command-line tool:
 
@@ -78,6 +91,7 @@ To revert to the original message:
    ros2 service call /update_publisher example_interfaces/srv/SetBool "data: true"
    ```
 ### 8. Launch File Usage
+#### beginners_tutorial
 The package includes a launch file to start both nodes simultaneously. To use it:
 
    ```sh
@@ -89,15 +103,26 @@ Launch file parameters:
 ```sh
 ros2 launch beginner_tutorials tutorial_launch.py publish_time:=2
 ```
+#### walker
+```sh
+ros2 launch walker world.launch.py
+```
 
 ### 9. Working with Bag Files
 #### Record Bag Files
+
+#### beginners_tutorial
 To record a bag file for 15 seconds:
 
    ```sh
    ros2 launch beginner_tutorials ros_bags.launch.py record_bag:=True
    ```
 The recorded bag files will be stored in the results/bag_files directory of beginner_tutorials package.
+
+#### walker
+```sh
+ros2 launch walker ros_bags.launch.py
+```
 
 #### Inspect Bag Files
 To inspect the recorded bag file:
