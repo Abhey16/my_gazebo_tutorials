@@ -1,3 +1,7 @@
+// MIT License
+//
+// Copyright (c) 2024 Abhey Sharma
+
 /**
  * @file walker.hpp
  * @brief Contains the definitions of the RobotController and RobotState classes

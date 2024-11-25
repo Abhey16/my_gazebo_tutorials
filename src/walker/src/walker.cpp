@@ -1,3 +1,7 @@
+// MIT License
+//
+// Copyright (c) 2024 Abhey Sharma
+
 /**
  * @file walker.cpp
  * @brief Implementation of the RobotController and its states for obstacle avoidance.
