@@ -170,21 +170,11 @@ Run the following in root of workspace
 
 
 ## clang-tidy output
-![clang-tidy](https://github.com/user-attachments/assets/4df1e261-4c23-47bb-9be6-8a15c8e70992)
-
+![clang-tidy](https://github.com/user-attachments/assets/4d99f3f0-50c9-4c9d-ae19-bc3a38c82f54)
 
 
 ## clanglint output
-![cpplint](https://github.com/user-attachments/assets/1a66fe5d-c45e-4298-8f5d-6ad4509ba13e)
+![cpplint](https://github.com/user-attachments/assets/59eb8742-6eae-452d-8cb1-fed349cc33f7)
 
-
-## rqt_console
-
-### INFO
-![info](https://github.com/user-attachments/assets/ef75042a-1403-4597-90b7-f32b070090cd)
-
-
-### WARN
-![warning](https://github.com/user-attachments/assets/1b6e5c41-e38c-427f-9138-dcd91da45e74)
 
 
