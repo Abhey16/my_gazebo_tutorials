@@ -99,11 +99,13 @@ Run the walker node during playback to verify the recorded messages:
 
 
 ## clang-tidy output
-![clang-tidy](https://github.com/user-attachments/assets/4d99f3f0-50c9-4c9d-ae19-bc3a38c82f54)
+![clang-tidy](https://github.com/user-attachments/assets/28c6f674-a245-4a81-bdbe-bf7b5b28d188)
+
 
 
 ## clanglint output
-![cpplint](https://github.com/user-attachments/assets/59eb8742-6eae-452d-8cb1-fed349cc33f7)
+![cpplint](https://github.com/user-attachments/assets/8b938b78-d0b2-45ed-a9bc-1d36fa7f60e5)
+
 
 
 
